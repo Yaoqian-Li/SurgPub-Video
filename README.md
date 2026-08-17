@@ -11,7 +11,7 @@ for surgical video-language understanding.
 
 <div align="center">
 
-[![arXiv](https://img.shields.io/badge/arXiv-2504.09641-b31b1b.svg)](https://arxiv.org/abs/2504.09641)
+[![arXiv](https://img.shields.io/badge/arXiv-2508.10054-b31b1b.svg)](https://arxiv.org/abs/2508.10054)
 [![Dataset](https://img.shields.io/badge/HuggingFace-Dataset-yellow.svg)](https://huggingface.co/datasets/Wallice/SurgPub-Video)
 [![Benchmark](https://img.shields.io/badge/HuggingFace-Benchmark-blue.svg)](https://huggingface.co/Wallice/SurgPub-Benchmark)
 [![RARP50](https://img.shields.io/badge/HuggingFace-RARP50-blue.svg)](https://huggingface.co/Wallice/SurgPub-RARP50)
@@ -33,7 +33,6 @@ scripts/      # training and evaluation entrypoints
 tinyllava/    # model, dataset, training, and evaluation code
 ```
 
-For detailed data preparation notes, see [DATA_PREPARATION.md](DATA_PREPARATION.md).
 
 ## Installation
 
@@ -47,13 +46,7 @@ pip install flash-attn==2.7.3 --no-build-isolation
 python3 -m pip install -U yt-dlp huggingface_hub
 ```
 
-Install `ffmpeg` with your system package manager, for example:
 
-```bash
-brew install ffmpeg
-# or
-sudo apt-get install -y ffmpeg
-```
 
 ## Data
 
@@ -173,7 +166,7 @@ Evaluation scripts print accuracy and save per-sample predictions to CSV.
 
 ## Contact
 
-For questions or suggestions, please contact `zhangxingjian@buaa.edu.cn`.
+For questions or suggestions, please contact `yqli@cse.cuhk.edu.hk`.
 
 ## Acknowledgements
 
