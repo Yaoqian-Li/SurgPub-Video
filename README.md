@@ -18,9 +18,7 @@ for surgical video-language understanding.
 
 </div>
 
-<div align="center">
-<img src="images/case.png" alt="SurgPub-Video example" width="90%">
-</div>
+
 
 ## Overview
 
