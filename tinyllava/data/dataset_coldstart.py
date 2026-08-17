@@ -100,7 +100,6 @@ class LazySupervisedDataset(LSDataset):
             if self.num_frames > 0:
                 frame_indices = np.linspace(0, total_frames - 1, self.num_frames, dtype=int)
             else:
-                #num_frames_to_extract = min(64, max(1, int(duration))) # 99.75% of train data < 1min
                 num_frames_to_extract = max(1, int(duration))
                 frame_indices = np.linspace(0, total_frames - 1, num_frames_to_extract, dtype=int)
             video_data = video_data[frame_indices] #torch.Size([8, 3, W, H])
@@ -114,7 +113,6 @@ class LazySupervisedDataset(LSDataset):
             data_dict['video'] = videos
         elif self.data_args.is_multimodal:
             # image does not exist in the data, but the model is multimodal
-            # print(f'{i}:{sources}')
             crop_size = getattr(self.data_args.image_processor, 'crop_size', getattr(self.data_args.image_processor, 'size'))
             data_dict['image'] = torch.zeros(3, crop_size['height'], crop_size['width'])
         return data_dict

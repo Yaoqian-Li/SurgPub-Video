@@ -36,11 +36,9 @@ def get_n_elements_equally_spaced(lst, n):
     if length <= n:
         return lst[:]
     
-    # 计算步长
     step = (length - 1) / (n - 1)
     result = []
     
-    # 等距离取元素
     for i in range(n):
         index = round(i * step)
         result.append(lst[index])
@@ -109,60 +107,8 @@ def save_frames(frames, save_dir):
     for i, frame in enumerate(frames):
         img = Image.fromarray((frame.cpu().numpy().transpose(1, 2, 0)).astype('uint8'))
         img.save(os.path.join(save_dir, f"frame_{i}.png"))
-# def generate_output(args, text_processor, image_preprocess, model, tokenizer, device='cuda'):
-#     # Process query
-#     qs = query
-#     qs = DEFAULT_IMAGE_TOKEN + "\n" + qs
 
-#     # Create message
-#     msg = Message()
-#     msg.add_message(qs)
 
-#     # Process text
-#     result = text_processor(msg.messages, mode='eval')
-#     input_ids = result['input_ids']
-#     prompt = result['prompt']
-#     input_ids = input_ids.unsqueeze(0).to(device)
-
-#     # Process image or video
-#     images_tensor = None
-#     video_tensor = None
-#     if image_file is not None:
-#         image_files = image_parser(args)
-#         images = load_images(image_files)[0]
-#         images_tensor = image_preprocess(images)
-#         images_tensor = images_tensor.unsqueeze(0).half().to(device)
-#         video_tensor = images_tensor.unsqueeze(0)
-
-#     # Define stopping criteria
-#     stop_str = text_processor.template.separator.apply()[1]
-#     keywords = [stop_str]
-#     stopping_criteria = KeywordsStoppingCriteria(keywords, tokenizer, input_ids)
-
-#     # Generate output
-#     with torch.inference_mode():
-#         output_ids = model.generate(
-#             input_ids,
-#             images=images_tensor,
-#             video=video_tensor,
-#             do_sample=True if args.temperature > 0 else False,
-#             temperature=args.temperature,
-#             top_p=args.top_p,
-#             num_beams=args.num_beams,
-#             pad_token_id=tokenizer.pad_token_id,
-#             max_new_tokens=args.max_new_tokens,
-#             use_cache=True,
-#             stopping_criteria=[stopping_criteria],
-#         )
-
-#     # Decode output
-#     outputs = tokenizer.batch_decode(output_ids, skip_special_tokens=True)[0]
-#     outputs = outputs.strip()
-#     if outputs.endswith(stop_str):
-#         outputs = outputs[: -len(stop_str)]
-#     outputs = outputs.strip()
-
-#     return outputs
 def eval_model(args):
     # Model
     disable_torch_init()
@@ -212,7 +158,6 @@ def eval_model(args):
             msg.add_message(qs)
 
             result = text_processor(msg.messages, mode='eval')
-            # 
             input_ids = result['input_ids']
             prompt = result['prompt']
             input_ids = input_ids.unsqueeze(0).cuda()
@@ -220,7 +165,6 @@ def eval_model(args):
             images_tensor = None
             video_tensor = None
             if not os.path.exists(frame_files[-1]):
-                # print(frame_files[-1])
                 row['outputs']='none'
                 row['frames']=frame_files
                 row['acc']=False
@@ -238,29 +182,6 @@ def eval_model(args):
             video_tensor= torch.stack(frames).unsqueeze(dim=0)
             if args.report_divprune_stats and torch.cuda.is_available():
                 torch.cuda.reset_peak_memory_stats()
-
-            # if args.video_file is not None:
-            #     video = EncodedVideo.from_path(args.video_file, decoder="decord", decode_audio=False)
-            #     duration = video.duration
-            #     video_data = video.get_clip(start_sec=0.0, end_sec=duration)
-            #     video_data = video_data['video'].permute(1, 0, 2, 3) #torch.Size([l, 3, W, H])
-
-            #     total_frames = video_data.shape[0]
-            #     if args.num_frame > 0:
-            #         frame_indices = np.linspace(0, total_frames - 1, args.num_frame, dtype=int)
-            #     else:
-            #         num_frames_to_extract = min(args.max_frame, max(1, int(duration)))
-            #         frame_indices = np.linspace(0, total_frames - 1, num_frames_to_extract, dtype=int)
-            #     video_data = video_data[frame_indices]
-
-            #     #save_frames(video_data)
-
-            #     videos = []
-            #     for video in video_data:
-            #         video = video_preprocess(video)
-            #         videos.append(video)
-            #     video_tensor = torch.stack(videos)
-            #     video_tensor = video_tensor.unsqueeze(dim=0)
 
             stop_str = text_processor.template.separator.apply()[1]
             keywords = [stop_str]
@@ -286,9 +207,6 @@ def eval_model(args):
                 generate_latency = time.perf_counter() - generate_start
             end_to_end_latency = time.perf_counter() - start_time
 
-            # result = subprocess.run(['nvidia-smi'], capture_output=True, text=True, check=True)
-            # print("\n=== nvidia-smi Output ===")
-            # print(result.stdout)
             outputs = tokenizer.batch_decode(
                 output_ids, skip_special_tokens=True
             )[0]
@@ -319,16 +237,7 @@ def eval_model(args):
             if i % args.save_step == 0:
                 output_df = pd.DataFrame(rows)
                 output_df.to_csv(args.output_path, index=False)
-                # with open(args.output_path, 'w', newline='') as f:
-                #     writer = csv.DictWriter(f, fieldnames)
-                #     writer.writeheader()
-                #     writer.writerows(rows)
-            # output.append(row)
     if rows:
-        # with open(args.output_path, 'w', newline='') as f:
-        #     writer = csv.DictWriter(f, fieldnames)
-        #     writer.writeheader()
-        #     writer.writerows(rows)
         output_df = pd.DataFrame(rows)
         output_df.to_csv(args.output_path, index=False)
     if total:

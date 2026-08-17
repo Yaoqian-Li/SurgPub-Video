@@ -4,7 +4,6 @@ import torch
 import torch.nn as nn
 
 from transformers import PreTrainedModel
-# from tinyllava.utils.data_utils import get_value_from_kwargs
 
 def get_value_from_kwargs(kwargs, name):
     if name in kwargs:

@@ -76,13 +76,8 @@ def accuracy_reward(completions, solution, **kwargs):
 
 def extract_first_think_answer(content):
     think_pattern = r"<think>(.*?)</think>"
-    #answer_pattern = r"<answer>(.*?)</answer>"
-
     think_match = re.search(think_pattern, content, re.DOTALL)
-    #answer_match = re.search(answer_pattern, content, re.DOTALL)
-
     think_content = think_match.group(1).strip() if think_match else None
-    #answer_content = answer_match.group(1).strip() if answer_match else None
 
     return think_content
 
@@ -106,14 +101,6 @@ def has_repeated_content(text):
             return True
         seen.add(sentence)
     return False
-
-"""
-def format_reward(completions, **kwargs):
-    pattern = r"<think>.*?</think>\s*<answer>.*?</answer>"
-    completion_contents = [completion[0]["content"] for completion in completions]
-    matches = [re.fullmatch(pattern, content, re.DOTALL) for content in completion_contents]
-    return [1.0 if match else 0.0 for match in matches]
-"""
 
 def format_reward(completions, **kwargs):
     pattern = r"<think>.*?</think>\s*<answer>.*?</answer>"
@@ -167,10 +154,6 @@ def train():
     model = training_recipe(model)
     model.config.use_cache = False
     tokenizer = model.tokenizer
-    #model.config.image_aspect_ratio = data_arguments.image_aspect_ratio
-    #data_arguments.image_processor = model.vision_tower._image_processor
-    #data_arguments.is_multimodal = True
-    #log_trainable_params(model)  # not work well with zero3
     
     reward_funcs = [accuracy_reward, format_reward]
     dataset =  DatasetDict({"train": Dataset.from_json(data_arguments.video_folder)})

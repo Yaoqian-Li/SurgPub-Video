@@ -44,10 +44,6 @@ class PerceiverResampler(nn.Module):
 
         x = self.linear(x) #torch.Size([bs, 728*16, 2560])
 
-        #b, v = x.shape[:2]
-        #position_encoding = self.position_encoding(v).to(device='cuda', dtype=x.dtype)
-        #x = x + position_encoding
-
         frame_splits = self.split_tensor(x, self.num_latents)
 
         frames = []
@@ -62,7 +58,6 @@ class PerceiverResampler(nn.Module):
             frames.append(out)
 
         frames = torch.cat(frames, dim=1) #torch.Size([bs, 512, 2560])
-        #print("frames:",frames.shape)
         b, v = frames.shape[:2]
         position_encoding = self.position_encoding(v).to(device='cuda', dtype=x.dtype) # [1, seq_len, d_model]
         frames = frames + position_encoding

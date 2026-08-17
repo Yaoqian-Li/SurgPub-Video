@@ -65,12 +65,6 @@ def process_directory(directory):
                         with open(txt_file, "w", encoding="utf-8"):
                             pass
 
-
-# 指定要处理的目录
-# directory = "/research/d1/gds/yqli/SurV/collect/cardiac_video"
-# #740
-# 处理目录
-# process_directory(directory)
 directory = "/research/d1/gds/yqli/SurV/collect/else_video"
 process_directory(directory)
 directory = "/research/d1/gds/yqli/SurV/collect/else2_video"

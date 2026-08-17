@@ -41,7 +41,6 @@ def split_to_even_chunks(indices, lengths, num_chunks):
 
 def get_modality_length_grouped_indices(lengths, batch_size, world_size, generator=None):
     # We need to use torch for the random part as a distributed sampler will set the random seed for torch.
-    #print("lengths:",lengths)
     assert all(l != 0 for l in lengths), "Should not have zero length."
     mm_indices, mm_lengths = zip(*[(i, l) for i, l in enumerate(lengths) if l > 0])
     lang_indices, lang_lengths = zip(*[(i, -l) for i, l in enumerate(lengths) if l < 0])
@@ -126,7 +125,6 @@ class LLaVATrainer(Trainer):
         if self.args.group_by_modality_length:
             lengths = self.train_dataset.modality_lengths
             return LengthGroupedSampler(
-                # self.args.train_batch_size * self.args.gradient_accumulation_steps, # TODO: seems that we should not have gradient_accumulation_steps
                 self.args.train_batch_size,
                 world_size=self.args.world_size,
                 lengths=lengths,
@@ -144,8 +142,6 @@ class LLaVATrainer(Trainer):
         """
         if is_sagemaker_mp_enabled():
             return super().create_optimizer()
-        # if self.sharded_ddp == ShardedDDPOption.SIMPLE:
-        #     return super().create_optimizer()
 
         opt_model = self.model
 
@@ -226,7 +222,6 @@ class LLaVATrainer(Trainer):
                 logger.info(f"skipped: {skipped/2**20}M params")
 
         return self.optimizer
-
 
 
 

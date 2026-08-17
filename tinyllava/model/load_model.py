@@ -63,7 +63,5 @@ def load_pretrained_model(model_name_or_path, load_type='hf', load_8bit=False, l
     
     image_processor = model.vision_tower._image_processor
     context_len = getattr(model.config, 'max_sequence_length', 2048)
-    # tokenizer = AutoTokenizer.from_pretrained(model.config.llm_model_name_or_path, use_fast=False, padding_side="right")
     tokenizer = model.tokenizer
-    #tokenizer.pad_token = tokenizer.eos_token
     return model, tokenizer, image_processor, context_len

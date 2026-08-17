@@ -384,4 +384,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-#usage: python3 download_video_frames.py --csv video_url.csv --target-dir /path/to/out --require-success --skip-existing

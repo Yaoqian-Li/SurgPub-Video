@@ -261,12 +261,6 @@ class LLaVATrainer_Reason(Trainer):
         rewards = acc_reward + (2 * acc_reward - 1) * format_reward
         rewards = torch.where(rewards == 0, torch.tensor(-2.0, device=rewards.device, dtype=rewards.dtype), rewards)
         
-        """
-        # Sum the rewards from all reward functions
-        rewards = rewards_per_func.sum(dim=1) #torch.Size([num_generations])
-        print("rewards:",rewards)
-        """
-
         # Compute grouped-wise rewards
         mean_grouped_rewards = rewards.view(-1, self.num_generations).mean(dim=1)
         std_grouped_rewards = rewards.view(-1, self.num_generations).std(dim=1)
@@ -274,7 +268,6 @@ class LLaVATrainer_Reason(Trainer):
         # Normalize the rewards to compute the advantages
         mean_grouped_rewards = mean_grouped_rewards.repeat_interleave(self.num_generations, dim=0)
         std_grouped_rewards = std_grouped_rewards.repeat_interleave(self.num_generations, dim=0)
-        #advantages = (rewards - mean_grouped_rewards)
         advantages = (rewards - mean_grouped_rewards) / (std_grouped_rewards + 1e-4) #torch.Size([num_generations])
 
         noise = torch.randn_like(advantages) * 0.02
@@ -283,7 +276,6 @@ class LLaVATrainer_Reason(Trainer):
         # x - x.detach() allows for preserving gradients from x
         per_token_loss = torch.exp(per_token_logps - per_token_logps.detach()) * advantages.unsqueeze(1)
         per_token_loss = -(per_token_loss - self.beta * per_token_kl)
-        #loss = ((per_token_loss * completion_mask).sum(dim=1) / completion_mask.shape[1]).mean()
         loss = ((per_token_loss * completion_mask).sum(dim=1) / completion_mask.sum(dim=1)).mean()
 
         # Log the metrics
