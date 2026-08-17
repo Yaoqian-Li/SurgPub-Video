@@ -4,7 +4,7 @@ set -e
 REPO_ROOT=${REPO_ROOT:-$(pwd)}
 DATA_ROOT=${DATA_ROOT:-$REPO_ROOT/dataset}
 MODEL_ROOT=${MODEL_ROOT:-/path/to/models}
-OUTPUT_DIR=${OUTPUT_DIR:-./outputs/e1}
+OUTPUT_DIR=${OUTPUT_DIR:-./outputs/surgpub}
 
 VIDEO_DATA_PATH=${VIDEO_DATA_PATH:-annotations/bench/qa_train.json}
 VIDEO_PATH=${VIDEO_PATH:-$DATA_ROOT}
@@ -24,7 +24,7 @@ SAVE_STEPS=${SAVE_STEPS:-2500}
 GPUS=${GPUS:-localhost:0,1,2,3}
 MASTER_PORT=${MASTER_PORT:-29501}
 
-RUN_NAME=${RUN_NAME:-TinyLLaVA-Video-Coldstart-16-38k-e5}
+RUN_NAME=${RUN_NAME:surgpub}
 TRAIN_OUTPUT_DIR=${TRAIN_OUTPUT_DIR:-$OUTPUT_DIR/checkpoints/$RUN_NAME}
 LOG_PATH=${LOG_PATH:-$OUTPUT_DIR/logs/train.log}
 
