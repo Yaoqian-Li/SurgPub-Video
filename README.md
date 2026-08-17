@@ -79,8 +79,9 @@ dataset/
   RARP50/<split>/<case>/frame/000000001.png
 ```
 
-For RARP50, download the original videos from the SAR-RARP50 project page and
-run:
+For RARP50, download the original videos from the
+[SAR-RARP50 project page](https://rdr.ucl.ac.uk/projects/SAR-RARP50_Segmentation_of_surgical_instrumentation_and_Action_Recognition_on_Robot-Assisted_Radical_Prostatectomy_Challenge/191091)
+and run:
 
 ```bash
 RARP_ROOT=$PWD/dataset/RARP50 SPLIT=trainset bash preprocess/RARP_preprocess.sh
