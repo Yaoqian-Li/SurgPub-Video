@@ -50,17 +50,9 @@ python3 -m pip install -U yt-dlp huggingface_hub
 
 ## Data
 
-Download released annotations:
 
-```bash
-huggingface-cli download Wallice/SurgPub-Video \
-  --repo-type dataset \
-  --local-dir annotations \
-  --include "bench/*" "rarp/*" \
-  --local-dir-use-symlinks False
-```
 
-Video URL metadata requires access approval:
+SurgPub-Video dataset raw videos requires access approval:
 
 ```text
 https://forms.gle/wPMv5CkZXuHt83wc9
@@ -93,6 +85,16 @@ run:
 ```bash
 RARP_ROOT=$PWD/dataset/RARP50 SPLIT=trainset bash preprocess/RARP_preprocess.sh
 RARP_ROOT=$PWD/dataset/RARP50 SPLIT=testset bash preprocess/RARP_preprocess.sh
+```
+
+Download released training and evaluation annotations:
+
+```bash
+huggingface-cli download Wallice/SurgPub-Video \
+  --repo-type dataset \
+  --local-dir annotations \
+  --include "bench/*" "rarp/*" \
+  --local-dir-use-symlinks False
 ```
 
 ## Checkpoints
